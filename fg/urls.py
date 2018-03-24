@@ -20,12 +20,13 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name="home"),
-    path('dashboard', views.dashboard, name="dashboard"),
+    path('dashboard/', views.dashboard, name="dashboard"),
+    path('user/<int:id>/profile/', views.profile, name="profile"),
     
     
 
     # Auth stuff
-    path('user/login', auth_views.LoginView.as_view(), name="login"),
-    path('user/logout', auth_views.LogoutView.as_view(), name="logout"),
-    path('user/register', views.register, name="register"),
+    path('user/login/', auth_views.LoginView.as_view(), name="login"),
+    path('user/logout/', auth_views.LogoutView.as_view(), name="logout"),
+    path('user/register/', views.register, name="register"),
 ]
