@@ -19,11 +19,13 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.home),
-
-    path('dashboard', views.dashboard),
+    path('', views.home, name="home"),
+    path('dashboard', views.dashboard, name="dashboard"),
+    
+    
 
     # Auth stuff
     path('user/login', auth_views.LoginView.as_view(), name="login"),
     path('user/logout', auth_views.LogoutView.as_view(), name="logout"),
+    path('user/register', views.register, name="register"),
 ]
