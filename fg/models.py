@@ -51,56 +51,97 @@ class Carpool(models.Model):
                 availableMembers.append(member)
 
         # Sort by criteria
-        availableMembers = sorted(availableMembers, key=lambda x: x.user.username)
+        availableMembers = sorted(availableMembers, key=lambda x: x.user.username, reverse=True)
         requiredSeats = len(availableMembers)
 
-        driveBack = []
-        others = []
+        cars = []
+
         for member in availableMembers:
-            for driver in driveBack:
-                if member.checkOverlap(driver[0]):
-                    others.append(member)
-                    break
-            else:
-                driveBack.append([member])
+            tripAMatched = False
+            tripBMatched = False
+            for comp in availableMembers:
+                if comp == member:
+                    continue
 
-        # Now we have a 2D Array with every drive who does not
-        # overlap with others on the way back -> they have to drive
-        # Now, fill the other drivers in, element 0 will be the driver
-        driveThere = copy.deepcopy(driveBack)
-        for member in others:
-            for driver in driveBack:
-                if driver[0].checkOverlap(member):
-                    driver.append(member)
+                if member.checkOverlap(comp, True):
+                    tripAMatched = True
+
+                if member.checkOverlap(comp, False):
+                    tripBMatched = True
+
+                if tripAMatched and tripBMatched:
                     break;
-            else:
-                raise Exception("The algorithm is broken, have no matching return driver")
 
-        for member in others:
-            for driver in driveThere:
-                if driver[0].checkOverlap(member):
-                    driver.append(member)
-                    break;
-            else:
-                # We found a driver who does not fit to any of the
-                # ones who drive back, so he needs to drive there on
-                # his/her own (TODO: that could may be fixed ^^)
-                # If he drives on his own, he has to drive back to
-                # or his car gets lost ^^
-                driveThere.append(member)
-                for driver in driveBack:
-                    for d in driver:
-                        if d == member:
-                            driver.remove(member) # remove from car
-                driveBack.append([member]) # create new car
+            if not tripAMatched or not tripBMatched:
+                # Member needs to drive on his own because:
+                # he can either drive there with nobody or
+                # he can not drive back with someone
+                # --> car[0] == driver
+                cars.append([member])
 
-        # Now we have a some what matching Configuration
-        # TODO: Make sure that the people will actually
-        #       fit in the car ^^
+        for car in cars:
+            availableMembers.remove(car[0])
+
+        availableMembers = sorted(availableMembers, key=lambda x: x.user.username)
+
+
+        carsA = cars
+        carsB = cars[:]
+        level = 0
+        while len(availableMembers) > 0:
+            # Sort all users to cars
+            i = 0
+            while i < len(availableMembers):
+                tripAMatched = (0, None)
+                tripBMatched = (0, None)
+                j = 0
+                while j < len(carsA):
+                    car = carsA[j]
+                    a = car[0].checkOverlap(availableMembers[i], True)
+                    if tripAMatched[0] < a:
+                        tripAMatched = (a, carsA[j])
+
+                    b = car[0].checkOverlap(availableMembers[i], False)
+                    if tripBMatched[0] < b:
+                        tripBMatched = (b, carsB[j])
+
+                    j+=1
+
+                # Level 0 -> No Matchers will become drivers
+                if not tripAMatched[0] and not tripBMatched[0]:
+                    level = 0
+                    carsA.append([availableMembers[i]])
+                    carsB.append([availableMembers[i]])
+                    availableMembers.remove(availableMembers[i])
+                    continue
+
+                # Level 1 -> Single matchers will become drivers
+                elif not tripAMatched[0] or not tripBMatched[0]:
+                    if level < 1:
+                        continue
+                    else:
+                        level = 1
+                        carsA.append([availableMembers[i]])
+                        carsB.append([availableMembers[i]])
+                        availableMembers.remove(availableMembers[i])
+                        continue
+                # Level 3 -> Asign Members to Cars
+                else:
+                    if level < 2:
+                        continue
+                    else:
+                        level = 2
+                        tripAMatched[1].append(availableMembers[i])
+                        tripBMatched[1].append(availableMembers[i])
+                        availableMembers.remove(availableMembers[i])
+                        continue
+
+            i += 1
+
         config = {}
         config["date"] = date
-        config["tripA"] = driveThere
-        config["tripB"] = driveBack
+        config["tripA"] = carsA
+        config["tripB"] = carsB
         return config
 
 class Membership(models.Model):
@@ -118,11 +159,13 @@ class Membership(models.Model):
     def __str__(self):
         return "User {0} is member of {1}".format(self.user.username, self.pool.name)
 
-    def checkOverlap(self, member, tripA=True):
+    def checkOverlap(self, member, tripA):
         """
             Check if member overlaps with this membership
             @param member other member to check
             @param tripA if True, check tripA else tripB
+            @return Returns the (relative) change in the total time span, if
+            the nodes not match it return 0 (false)
         """
         if tripA:
             beginSelf = self.tripABegin
@@ -135,7 +178,20 @@ class Membership(models.Model):
             endSelf = self.tripBEnd
             endOther = member.tripBEnd
 
-        return (beginSelf <= endOther) and (beginOther <= endSelf)
+        begin = max([beginSelf, beginOther])
+        end = min([endSelf, endOther])
+
+        def diffTime(start, end):
+            s = start.hour * 60 + start.minute
+            e = end.hour * 60 + end.minute
+            return e - s
+
+        diff = diffTime(begin, end)
+        if diff < 0:
+            diff = 0
+
+        return diff / diffTime(endSelf, beginSelf)
+
 
 
 class Car(models.Model):
