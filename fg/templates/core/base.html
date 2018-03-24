@@ -3,18 +3,68 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DriveShare - {% block title %}CHANGE_TITLE{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'contrib/semantic/semantic.css' %}">
   </head>
+  
+  
   <body>
-
-    <div>Header</div>
+    <div class="ui secondary pointing menu">
+      {% if user.is_authenticated %}
+        <a class="item"> Dashboard </a>
+  	    <a class="item"> Carpools </a>
+      {% else %}
+        <a class="item">
+          Home
+    	</a>
+      {% endif %}
+	    <div class="right menu">
+	      {% if user.is_authenticated %}
+	          <a class="item">
+	      	    Profile
+	  	      </a>
+	    	  <a class="ui item">
+	      	    Logout
+	    	  </a>
+  	    
+	  	  {%else%}
+	  	    <a class="ui item">
+	  	      Sign in
+	  	    <a/>
+	  	    <a class="ui item">
+	  	      Login
+	  	    <a/>
+	  	  {%endif%}
+  	  </div>
+    </div>
+    
+    
+    
+    
+    <div class="ui breadcrumb">
+      {% for p in path %}
+        <a class="section">{{ p }}</a>
+        <div class="divider"> / </div>
+      {% endfor %}
+    </div>
+    
 
     {% block content %}
     CHANGE THE CONTENT!!!!elf!11!!
     {% endblock %}
 
-    <div>Footer</div>
+    <div class="ui inverted vertical footer segment form-page">
+      <div class="ui center aligned container">
+        <div class="ui stackable inverted two column grid">
+    	  <div class="column">
+    	  	<a> Help </a>
+    	  </div>
+    	  <div class="column">
+    	  	<a> Impressum </a>
+    	  </div>
+      </div>
+    </div>
 
   </body>
 </html>
