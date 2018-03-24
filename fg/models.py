@@ -89,6 +89,8 @@ class Carpool(models.Model):
         carsB = cars[:]
         level = 0
         while len(availableMembers) > 0:
+
+            changed = False
             # Sort all users to cars
             i = 0
             while i < len(availableMembers):
@@ -113,30 +115,42 @@ class Carpool(models.Model):
                     carsA.append([availableMembers[i]])
                     carsB.append([availableMembers[i]])
                     availableMembers.remove(availableMembers[i])
+                    changed = True
                     continue
 
                 # Level 1 -> Single matchers will become drivers
                 elif not tripAMatched[0] or not tripBMatched[0]:
                     if level < 1:
+                        i += 1
                         continue
                     else:
                         level = 1
                         carsA.append([availableMembers[i]])
                         carsB.append([availableMembers[i]])
                         availableMembers.remove(availableMembers[i])
+                        changed = True
                         continue
-                # Level 3 -> Asign Members to Cars
+                # Level 2 -> Asign Members to Cars
                 else:
                     if level < 2:
+                        i += 1
                         continue
                     else:
                         level = 2
                         tripAMatched[1].append(availableMembers[i])
                         tripBMatched[1].append(availableMembers[i])
                         availableMembers.remove(availableMembers[i])
+                        changed = True
                         continue
 
-            i += 1
+                i += 1
+
+            if not changed:
+                level += 1
+                if level > 2:
+                    raise Exception("Algorithm Broke again...")
+
+
 
         config = {}
         config["date"] = date
@@ -181,16 +195,22 @@ class Membership(models.Model):
         begin = max([beginSelf, beginOther])
         end = min([endSelf, endOther])
 
-        def diffTime(start, end):
+        def diffTime(end, start):
             s = start.hour * 60 + start.minute
             e = end.hour * 60 + end.minute
             return e - s
 
-        diff = diffTime(begin, end)
+        diff = diffTime(end, begin)
         if diff < 0:
             diff = 0
+        elif diff == 0:
+            diff = 1 #TODO: Make less ugly
 
-        return diff / diffTime(endSelf, beginSelf)
+        relChange = diff / diffTime(endSelf, beginSelf)
+
+        print("{0} <------- {1} => {2}".format(self.user.username, member.user.username, relChange))
+
+        return relChange
 
 
 
