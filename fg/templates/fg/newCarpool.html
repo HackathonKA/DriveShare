@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{%block title%}
+Login
+{%endblock title%}
+
+
+{%block content%}
+  <form action="{% url 'createCarpool' %}" method="post">
+
+    {%csrf_token%}
+    <label>Name</label> <input type="text", name="title" /><br>
+    <label>Description</label> <textarea name="desc" rows="8" cols="80"></textarea> <br>
+    <label>From</label> <input type="text", name="locA" /><br>
+    <label>To</label> <input type="text", name="locB" /><br>
+    <input type="submit" value="Create" />
+
+  </form>
+{% endblock %}

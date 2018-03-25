@@ -1,8 +1,31 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
+
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class CreateCarpool(LoginRequiredMixin, TemplateView):
+    template_name = "fg/newCarpool.html"
+
+    def post(self, request):
+        cp = Carpool()
+        cp.name = request.POST["title"]
+        cp.desc = request.POST["desc"]
+        cp.loc_a = request.POST["locA"]
+        cp.loc_b = request.POST["locB"]
+        cp.active = True
+        cp.save()
+
+        # Link to creating user
+        m = Membership()
+        m.user = request.user
+        m.pool = cp
+        m.save()
+
+        return redirect("dashboard")
 
 # Create your views here.
 def home(request):
