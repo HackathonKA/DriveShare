@@ -50,12 +50,11 @@ class Carpool(models.Model):
             if dayConv[date.weekday()] in member.days: # Check if member selected this day
                 availableMembers.append(member)
 
-        # Sort by criteria
-        availableMembers = sorted(availableMembers, key=lambda x: x.user.username, reverse=True)
         requiredSeats = len(availableMembers)
 
         cars = []
 
+        # Filter out drivers that need to drive
         for member in availableMembers:
             tripAMatched = False
             tripBMatched = False
@@ -82,11 +81,12 @@ class Carpool(models.Model):
         for car in cars:
             availableMembers.remove(car[0])
 
+        # sort them by a category
         availableMembers = sorted(availableMembers, key=lambda x: x.user.username)
 
 
-        carsA = cars
-        carsB = cars[:]
+        carsA = copy.deepcopy(cars)     # Cars for tripA
+        carsB = copy.deepcopy(cars)     # Cars for tripB
         level = 0
         while len(availableMembers) > 0:
 
@@ -207,8 +207,6 @@ class Membership(models.Model):
             diff = 1 #TODO: Make less ugly
 
         relChange = diff / diffTime(endSelf, beginSelf)
-
-        print("{0} <------- {1} => {2}".format(self.user.username, member.user.username, relChange))
 
         return relChange
 
