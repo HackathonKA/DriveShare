@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from .models import *
 
 # Create your views here.
 def home(request):
@@ -24,3 +25,22 @@ def dashboard(request):
 def profile(request, num):
     user = get_object_or_404(User, pk=num)
     return render(request, "fg/profile.html", {"path":["User", "Profile",], "user": user})
+
+@login_required
+def carpool(request, id):
+    user = request.user
+    ms = user.membership_set.all()
+    match = False
+    for m in ms:
+        if m.pool.pk == id:
+            match=True
+            break
+        else:
+            print(str(m.pool.pk) + " <> " + str(id))
+
+
+    if not match:
+        return HttpResponseForbidden("No Permission!")
+
+    carpool = get_object_or_404(Carpool, pk=id)
+    return render(request, "fg/carpool.html", {"carpool": carpool, "driversToday": carpool.getDriverConfigurationForToday()})

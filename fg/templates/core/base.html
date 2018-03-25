@@ -5,7 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DriveShare - {% block title %}CHANGE_TITLE{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'contrib/semantic/semantic.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/core.css' %}">
+    <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </head>
 
 
@@ -13,82 +19,84 @@
 
   	<!-- Navigation Bar -->
 
-    <div class="ui pointing menu">
+    <nav class="navbar sticky-top navbar-dark bg-dark navbar-expand-md justify-content-between">
+      <span class="navbar-brand">DriveShare</span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-      <!--Left Part-->
-
-      {% if user.is_authenticated %}
-        <a class="item" href = {% url "dashboard" %} > Dashboard </a>
-
-  	    <div class="ui pointing dropdown link item">
-		  <span class="text">Carpools</span>
-		  <i class="dropdown icon"></i>
-		  <div class="menu">
-		    <div class="header">Categories</div>
-		    <div class="item">Home Goods</div>
-		    <div class="item">Bedroom</div>
-		    <div class="divider"></div>
-		    <div class="header">Order</div>
-		    <div class="item">Status</div>
-		    <div class="item">Cancellations</div>
-		  </div>
-		</div>
-      {% else %}
-
-        <a class="item" href = {% url "home" %}>
-          Home
-    	</a>
-
-      {% endif %}
-
-      <!-- Profile/Login/Logout/Register -->
-
-	  <div class="right menu">
-	    {% if user.is_authenticated %}
-	      <a class="item" href="{% url 'profile' user.pk %}">
-            Profile
-	  	  </a>
-	      <a class="ui item" href = {% url "logout" %}>
-	        Logout
-	      </a>
-  	    {%else%}
-	  	  <a class="ui item" href = {% url "register" %}>
-	  	    Register
-	  	  <a/>
-	  	  <a class="ui item" href = {% url "login" %}>
-	  	    Login
-	  	  <a/>
-	  	{%endif%}
-  	  </div>
-    </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
 
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+          {%endif%}
+        </ul>
 
-    <div class="ui segment">
-    <div class="ui breadcrumb">
+        <ul class="navbar-nav navbar-right">
+
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profile' user.pk %}">@{{user.username}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'register' %}">Sign-Up</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Sign-In</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+
+    <ol class="breadcrumb">
       {% for p in path %}
-        <div class="section">{{ p }}</div>
-        <div class="divider"> / </div>
+        <li class="breadcrumb-item">{{ p }}</li>
       {% endfor %}
-    </div>
-    </div>
+    </ol>
 
-
+    <div class="container mainContent">
     {% block content %}
     CHANGE THE CONTENT!!!!elf!11!!
     {% endblock %}
+    <div>
 
-    <div class="ui inverted center vertical footer segment form-page">
-      <div class="ui center aligned container">
-        <div class="ui stackable inverted two column grid">
-    	  <div class="column">
-    	  	<a href = {% url "help" %}> Help </a>
-    	  </div>
-    	  <div class="column">
-    	  	<a href = {% url "impressum" %}> Impressum </a>
-    	  </div>
+    <footer class="container fixed-bottom">
+      <div class="row">
+        <div class="col-6">
+          <div class="footerCenter">
+            <h5>DriveShare</h5>
+            <ul class="list-unstyled text-small">
+              <li class="text-muted">&copy; 2018</li>
+              <li class="text-muted">Created at</li>
+              <li><a class="text-muted" href="https://opencodes.io">OpenCodes Hackathon</a></li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="col-6">
+          <div class="footerCenter">
+            <h5>About</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted"   href="{% url 'impressum' %}">Impressum</a></li>
+              <li><a class="text-muted"   href="{% url 'help' %}">Help</a></li>
+            </ul>
+          <div>
+        </div>
       </div>
-    </div>
+    </footer>
 
   </body>
 </html>

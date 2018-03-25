@@ -35,6 +35,9 @@ class Carpool(models.Model):
     def __str__(self):
         return str(self.name)
 
+    def getDriverConfigurationForToday(self):
+        return self.getDriverConfiguration(datetime.datetime.now())
+
     def getDriverConfiguration(self, date):
         """
         @param date a DateTime Object
@@ -210,6 +213,9 @@ class Membership(models.Model):
 
         return relChange
 
+    def getCar(self):
+        car = self.user.car_set.get(isActive=True)
+        return car
 
 
 class Car(models.Model):
