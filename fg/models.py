@@ -38,6 +38,9 @@ class Carpool(models.Model):
     def getDriverConfigurationForToday(self):
         return self.getDriverConfiguration(datetime.datetime.now())
 
+    def getDriverConfigurationForTomorrow(self):
+        return self.getDriverConfiguration(datetime.datetime.now() + datetime.timedelta(days=1))
+
     def getDriverConfiguration(self, date):
         """
         @param date a DateTime Object
@@ -171,7 +174,7 @@ class Membership(models.Model):
     tripBBegin = models.TimeField(default=datetime.time(16))
     tripBEnd = models.TimeField(default=datetime.time(17))
 
-    days = MultiSelectField(choices=WEEKDAYS, default=[])
+    days = MultiSelectField(choices=WEEKDAYS, default=["mon", "tue", "wen", "thu", "fri"])
 
     def __str__(self):
         return "User {0} is member of {1}".format(self.user.username, self.pool.name)

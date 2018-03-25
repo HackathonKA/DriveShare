@@ -7,38 +7,84 @@
 
 {%block content%}
   <h1>{{carpool.name}}</h1>
-  <h2>Drivers List</h2>
+  <h2>Drivers List ({{driversToday.date|date:"M d"}})</h2>
   <div class="row">
 
-    <div class="order-lg-2 col-lg-3" style="margin-bottom: 20px;">
-        <div class="card bg-light mb-3" style="max-width: 18rem;">
-          <div class="card-header">Members</div>
-          <div class="card-body">
-            <ul class="list-unstyled">
-              {% for member in carpool.membership_set.all %}
-                <li>{{member.user.full_name}} @{{member.user.username}}</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-    </div>
-
-    <div class="col-lg-9">
-        <div class="card bg-light mb-3" style="max-width: 18rem;">
+    <div class="col-lg-8">
+        <div class="card bg-light" style="margin-bottom: 15px;">
           <div class="card-header">Trip A</div>
           <div class="card-body">
             {% for car in driversToday.tripA %}
-              <h5>{{car.0.user.full_name}} ({{car.0.getCar.name}}) @{{car.0.user.username}}</h5>
+              <h5><b>Car #{{forloop.counter}} {{car.0.user.get_full_name}}</b> ({{car.0.getCar.name}}) @{{car.0.user.username}}</h5>
               <h6>Members:</h6>
                 <ul class="list-unstyled">
                   {% for member in car %}
                     {% if forloop.counter != 1 %}
-                      <li>{{member.user.full_name}} (@{{member.user.username}})</li>
+                      <li>{{member.user.get_full_name}} (@{{member.user.username}})</li>
                     {% endif %}
                   {% endfor %}
                 </ul>
               <hr>
             {% endfor %}
+          </div>
+        </div>
+
+        <div class="card bg-light" style="margin-bottom: 15px;">
+          <div class="card-header">Trip B</div>
+          <div class="card-body">
+            {% for car in driversToday.tripB %}
+              <h5><b>Car #{{forloop.counter}} {{car.0.user.get_full_name}}</b> ({{car.0.getCar.name}}) @{{car.0.user.username}}</h5>
+              <h6>Members:</h6>
+                <ul class="list-unstyled">
+                  {% for member in car %}
+                    {% if forloop.counter != 1 %}
+                      <li>{{member.user.get_full_name}} (@{{member.user.username}})</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              <hr>
+            {% endfor %}
+          </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4" style="margin-bottom: 20px;">
+        <div class="card bg-light" style="max-width: 18rem;">
+          <div class="card-header">Members</div>
+          <div class="card-body">
+            <ul class="list-unstyled">
+              {% for member in carpool.membership_set.all %}
+                <li>{{member.user.get_full_name}} @{{member.user.username}}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="card bg-light" style="max-width: 18rem; margin-top: 12px;">
+          <div class="card-header">Actions</div>
+          <div class="card-body">
+            <div style="margin-bottom: 20px;">
+              <form action="{% url 'addToCarpool' carpool.pk %}" method="post" style="margin-bottom: 6px">
+                {% csrf_token %}
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Username..." name="username" />
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="ion-plus"></i> Add
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <form action="{% url 'leaveCarpool' carpool.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-block btn btn-danger">
+                  <i class="ion-android-exit"></i> Leave
+                </button>
+              </form>
+
+
+            </div>
           </div>
         </div>
     </div>

@@ -3,7 +3,26 @@
   font-weight: 800;
 }
 
-footer.container {
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  padding: 0;
+  margin-bottom: 150px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 150px;
+}
+
+
+.footer.container {
   text-align: center;
   border-top: 1px solid rgba(0,0,0,0.1);
   padding-top: 15px;
