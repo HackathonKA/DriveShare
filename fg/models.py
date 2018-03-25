@@ -216,6 +216,8 @@ class Car(models.Model):
     name = models.CharField(max_length=50)
     kind = models.CharField(max_length=2, choices=CAR_TYPE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    seats = models.IntegerField(default=5)
+    isActive = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name) +" by "+str(self.user.username)
