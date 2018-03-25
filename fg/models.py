@@ -114,7 +114,7 @@ class Carpool(models.Model):
         level = 0
         i = 0
 
-        
+
         while level < 6:
 # +++++++++++++++++++++++++++++++++
 # level 0
@@ -256,8 +256,8 @@ class Carpool(models.Model):
                         j += 1
                     # If after iterating through all cars for one member and none was found
                     # -> callback to lower level to add member as new driver
-                    if not tmpA or not tmpB:
-                        if not tmpA and not tmpB:
+                    if not a or not b:
+                        if not a and not b:
                             level = 0
                             level0 = level3
                             level2 = level4  # after adding a new driver to the car array check the still not assigned members without cars again
@@ -315,7 +315,7 @@ class Carpool(models.Model):
                         j += 1
                     # If after iterating through all cars for one member and none was found
                     # -> not assignable
-                    if not tmpA or not tmpB:
+                    if not a or not b:
                         notAssignableMembers.append(level4[i])
                         level4.remove(level4[i])
                         continue
