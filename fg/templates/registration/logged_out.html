@@ -7,7 +7,14 @@ Logout
 {% endblock%}
 
 {% block content %}
-<div>
-You are logged out!
-</div>
+<div class = "container">
+    <div class="row justify-content-center align-items-center">
+	  <h2>
+    	Logged Out
+	  </h2>
+	</div>
+	<div class="row justify-content-center align-items-center">
+	  <a href = {% url "login" %}> Sign in again </a>
+	</div>
+  </div>
 {% endblock %}
