@@ -13,3 +13,17 @@ footer.container {
   text-align: left;
   display: inline-block;
 }
+
+.mainContent {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+#maintitle {
+  font-weight: 800;
+}
+
+.fg-card {
+  margin-bottom: 12px;
+}

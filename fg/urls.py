@@ -24,6 +24,7 @@ urlpatterns = [
     path('help/', views.helpview, name="help"),
     path('impressum/', views.impressum, name="impressum"),
 
+    path('carpool/<int:id>', views.carpool, name="carpoolOverview"),
 
 
     # Auth stuff

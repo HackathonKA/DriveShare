@@ -7,6 +7,7 @@
     <title>DriveShare - {% block title %}CHANGE_TITLE{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/core.css' %}">
+    <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -18,7 +19,7 @@
 
   	<!-- Navigation Bar -->
 
-    <nav class="navbar sticky-top navbar-dark bg-dark navbar-expand-lg justify-content-between">
+    <nav class="navbar sticky-top navbar-dark bg-dark navbar-expand-md justify-content-between">
       <span class="navbar-brand">DriveShare</span>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -43,7 +44,7 @@
 
           {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'profile' user.pk %}">Profile</a>
+              <a class="nav-link" href="{% url 'profile' user.pk %}">@{{user.username}}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -66,10 +67,11 @@
       {% endfor %}
     </ol>
 
-
+    <div class="container mainContent">
     {% block content %}
     CHANGE THE CONTENT!!!!elf!11!!
     {% endblock %}
+    <div>
 
     <footer class="container fixed-bottom">
       <div class="row">
