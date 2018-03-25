@@ -70,10 +70,10 @@ class Carpool(models.Model):
                 if comp == member:
                     continue
 
-                if member.checkOverlap(comp, True):
+                if member.checkOverlap([comp], True):
                     tripAMatched = True
 
-                if member.checkOverlap(comp, False):
+                if member.checkOverlap([comp], False):
                     tripBMatched = True
 
                 if tripAMatched and tripBMatched:
@@ -85,10 +85,11 @@ class Carpool(models.Model):
                 # he can not drive back with someone
                 # --> car[0] == driver
                 cars.append([member])
-
         for car in cars:
             availableMembersWithCars.remove(car[0])
 
+        print(cars)
+        print("Test")
         # sort them by a category
         availableMembersWithCars = sorted(availableMembersWithCars, key=lambda x: x.user.username)
         availableMembers = sorted(availableMembers, key=lambda x: x.user.username, reverse=True)
@@ -107,6 +108,15 @@ class Carpool(models.Model):
         level = 0
         i = 0
 
+        print("+++++++++++++++++++++++  -0-  ++++++++++++++++++++++++++")
+        print(level0)
+        print("+++++++++++++++++++++++  -A-  ++++++++++++++++++++++++++")
+        print(carsA)
+        print("+++++++++++++++++++++++  -B-  ++++++++++++++++++++++++++")
+        print(carsB)
+        print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print(" ")
+        print(" ")
         while level < 6:
 # +++++++++++++++++++++++++++++++++
 # level 0
@@ -114,6 +124,15 @@ class Carpool(models.Model):
             if level is 0:
 
                 if i >= len(level0):
+                    print("+++++++++++++++++++++++  -1-  ++++++++++++++++++++++++++")
+                    print(level1)
+                    print("+++++++++++++++++++++++  -A-  ++++++++++++++++++++++++++")
+                    print(carsA)
+                    print("+++++++++++++++++++++++  -B-  ++++++++++++++++++++++++++")
+                    print(carsB)
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    print(" ")
+                    print(" ")
                     i = 0
                     level1 = level0
                     level = 1
@@ -126,8 +145,8 @@ class Carpool(models.Model):
                         break
 
                 if not tripAnyMatched:
-                    carsA.append(level0[i])
-                    carsB.append(level0[i])
+                    carsA.append([level0[i]])
+                    carsB.append([level0[i]])
                     level0.remove((level0[i]))
                     continue
                 else:
@@ -139,6 +158,15 @@ class Carpool(models.Model):
 # +++++++++++++++++++++++++++++++++
             elif level is 1:
                 if i >= len(level1):
+                    print("+++++++++++++++++++++++  -2-  ++++++++++++++++++++++++++")
+                    print(level2)
+                    print("+++++++++++++++++++++++  -A-  ++++++++++++++++++++++++++")
+                    print(carsA)
+                    print("+++++++++++++++++++++++  -B-  ++++++++++++++++++++++++++")
+                    print(carsB)
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    print(" ")
+                    print(" ")
                     i = 0
                     level3 = level1
                     level = 2
@@ -155,8 +183,8 @@ class Carpool(models.Model):
                         break
 
                 if not tripAMatched or not tripBMatched:
-                    carsA.append(level1[i])
-                    carsB.append(level1[i])
+                    carsA.append([level1[i]])
+                    carsB.append([level1[i]])
                     level1.remove(level1[i])
                     continue
                 else:
@@ -168,6 +196,15 @@ class Carpool(models.Model):
 # +++++++++++++++++++++++++++++++++
             elif level is 2:
                 if len(level2) is 0:
+                    print("+++++++++++++++++++++++  -3-  ++++++++++++++++++++++++++")
+                    print(level3)
+                    print("+++++++++++++++++++++++  -A-  ++++++++++++++++++++++++++")
+                    print(carsA)
+                    print("+++++++++++++++++++++++  -B-  ++++++++++++++++++++++++++")
+                    print(carsB)
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    print(" ")
+                    print(" ")
                     i = 0
                     level = 3
                     continue
@@ -220,6 +257,15 @@ class Carpool(models.Model):
 # +++++++++++++++++++++++++++++++++
             elif level is 3:
                 if len(level3) is 0:
+                    print("+++++++++++++++++++++++  -4-  ++++++++++++++++++++++++++")
+                    print(level4)
+                    print("+++++++++++++++++++++++  -A-  ++++++++++++++++++++++++++")
+                    print(carsA)
+                    print("+++++++++++++++++++++++  -B-  ++++++++++++++++++++++++++")
+                    print(carsB)
+                    print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    print(" ")
+                    print(" ")
                     i = 0
                     level = 4
                     continue
@@ -252,9 +298,11 @@ class Carpool(models.Model):
                         if not tmpA and not tmpB:
                             level = 0
                             level0 = level3
+                            level2 = level4  # after adding a new driver to the car array check the still not assigned members without cars again
                         else:
                             level = 1
                             level1 = level3
+                            level2 = level4  # after adding a new driver to the car array check the still not assigned members without cars again
                         average = 100  # avoid the rest of the function to do any damage to the data
                         break
                     averageTMP = float(a+b) / 2
@@ -271,8 +319,7 @@ class Carpool(models.Model):
                     carsA[positionCarA].append(level3[position])
                     carsB[positionCarB].append(level3[position])
                     level3.remove(level3[position])
-                else:
-                    raise Exception ("FUUUUUUUUUUUUU")
+                continue
 
 # +++++++++++++++++++++++++++++++++
 # level 4
@@ -305,7 +352,7 @@ class Carpool(models.Model):
                             positionB = j
                         j += 1
                     # If after iterating through all cars for one member and none was found
-                    # -> assign to
+                    # -> not assignable
                     if not tmpA or not tmpB:
                         notAssignableMembers.append(level4[i])
                         level4.remove(level4[i])
@@ -317,15 +364,12 @@ class Carpool(models.Model):
                         positionCarB = positionB
                         position = i
                     i += 1
-                if average is 100:
-                    continue
                 # if no valid average greater than 0 is possible to find shall be catched earlier
                 if average > 0:
                     carsA[positionCarA].append(level3[position])
                     carsB[positionCarB].append(level3[position])
                     level3.remove(level3[position])
-                else:
-                    raise Exception ("FUUUUUUUUUUUUU")
+                continue
 
         """
         while len(availableMembers) > 0 or len(availableMembersWithCars) > 0:
@@ -440,7 +484,10 @@ class Membership(models.Model):
             @return Returns the (relative) change in the total time span, if
             the nodes not match it return 0 (false)
         """
-
+        if not isinstance(member, list):
+            print("0")
+            return 0
+        print("1")
         if tripA:
             beginSelf = self.tripABegin.hour * 60 + self.tripABegin.minute
             endSelf = self.tripAEnd.hour * 60 + self.tripAEnd.minute
@@ -477,10 +524,10 @@ class Membership(models.Model):
         elif diff == 0:
             diff = 1
 
-        if endOther is beginOther:
-            endOther += 1
+        if (endOther - beginOther) is 0:
+            endOther = endOther + 1
 
-        return diff / (endOther - beginOther)
+        return float(diff) / float(endOther - beginOther)
 
 
 
