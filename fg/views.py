@@ -47,11 +47,8 @@ class AddToCarpool(LoginRequiredMixin, View):
 
         m = get_object_or_404(Membership, user=request.user, pool=cp)
         # Return 404 if user is not in the actual pool TODO: Use right error code ^^
-        print("A")
         usr = request.POST["username"]
-        print(usr)
         userToAdd = get_object_or_404(User, username=usr)
-        print("B")
         nm = Membership()
         nm.user = userToAdd
         nm.pool = cp
