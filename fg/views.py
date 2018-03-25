@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from .models import *
 
 from django.views.generic import TemplateView
+from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class CreateCarpool(LoginRequiredMixin, TemplateView):
@@ -26,6 +27,36 @@ class CreateCarpool(LoginRequiredMixin, TemplateView):
         m.save()
 
         return redirect("dashboard")
+
+class LeaveCarpool(LoginRequiredMixin, View):
+    def get(self, request):
+        raise Http404
+
+    def post(self, request, id):
+        cp = get_object_or_404(Carpool, pk=id)
+        m = get_object_or_404(Membership, user=request.user, pool=cp)
+        m.delete()
+        return redirect("dashboard")
+
+class AddToCarpool(LoginRequiredMixin, View):
+    def get(self, request):
+        raise Http404
+
+    def post(self, request, id):
+        cp = get_object_or_404(Carpool, pk=id)
+
+        m = get_object_or_404(Membership, user=request.user, pool=cp)
+        # Return 404 if user is not in the actual pool TODO: Use right error code ^^
+        print("A")
+        usr = request.POST["username"]
+        print(usr)
+        userToAdd = get_object_or_404(User, username=usr)
+        print("B")
+        nm = Membership()
+        nm.user = userToAdd
+        nm.pool = cp
+        nm.save()
+        return redirect("carpoolOverview", id)
 
 # Create your views here.
 def home(request):

@@ -25,6 +25,8 @@ urlpatterns = [
     path('impressum/', views.impressum, name="impressum"),
 
     path('carpool/create', views.CreateCarpool.as_view(), name="createCarpool"),
+    path('carpool/leave/<int:id>', views.LeaveCarpool.as_view(), name="leaveCarpool"),
+    path('carpool/add/<int:id>', views.AddToCarpool.as_view(), name="addToCarpool"),
     path('carpool/<int:id>', views.carpool, name="carpoolOverview"),
     path('carpool/<int:id>/<day>', views.carpool, name="carpoolOverview"),
 

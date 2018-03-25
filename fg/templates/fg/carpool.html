@@ -59,6 +59,34 @@
             </ul>
           </div>
         </div>
+
+        <div class="card bg-light" style="max-width: 18rem; margin-top: 12px;">
+          <div class="card-header">Actions</div>
+          <div class="card-body">
+            <div style="margin-bottom: 20px;">
+              <form action="{% url 'addToCarpool' carpool.pk %}" method="post" style="margin-bottom: 6px">
+                {% csrf_token %}
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Username..." name="username" />
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">
+                      <i class="ion-plus"></i> Add
+                    </button>
+                  </div>
+                </div>
+              </form>
+
+              <form action="{% url 'leaveCarpool' carpool.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn-block btn btn-danger">
+                  <i class="ion-android-exit"></i> Leave
+                </button>
+              </form>
+
+
+            </div>
+          </div>
+        </div>
     </div>
 
 
