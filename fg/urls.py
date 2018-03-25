@@ -21,14 +21,14 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('dashboard/', views.dashboard, name="dashboard"),
-    path('user/<int:num>/profile/', views.profile, name="profile"),
     path('help/', views.helpview, name="help"),
     path('impressum/', views.impressum, name="impressum"),
-    
-    
+
+
 
     # Auth stuff
     path('user/login/', auth_views.LoginView.as_view(), name="login"),
     path('user/logout/', auth_views.LogoutView.as_view(), name="logout"),
     path('user/register/', views.register, name="register"),
+    path('user/<int:num>/profile/', views.profile, name="profile"),
 ]
