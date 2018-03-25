@@ -63,6 +63,7 @@
         <div class="card bg-light" style="max-width: 18rem; margin-top: 12px;">
           <div class="card-header">Actions</div>
           <div class="card-body">
+            <center><h6><b>User Actions</b></h6></center>
             <div style="margin-bottom: 20px;">
               <form action="{% url 'addToCarpool' carpool.pk %}" method="post" style="margin-bottom: 6px">
                 {% csrf_token %}
@@ -76,11 +77,37 @@
                 </div>
               </form>
 
-              <form action="{% url 'leaveCarpool' carpool.pk %}" method="post">
+              <form action="{% url 'leaveCarpool' carpool.pk %}" method="post" style="margin-bottom: 12px">
                 {% csrf_token %}
                 <button type="submit" class="btn-block btn btn-danger">
                   <i class="ion-android-exit"></i> Leave
                 </button>
+              </form>
+              <hr>
+              <form action="{% url 'changeCarpoolSettings' carpool.pk %}" method="post">
+                {% csrf_token %}
+
+                <div class="weekdaySelectorWrapper">
+                  <h6><b>Weekdays</b></h6>
+                  {% for day in myMember.getDayConf %}
+                    <div class="weekdaySelector">
+                      <input type="checkbox" value="{{day.0}}" name="days"
+
+                      {% if day.1 == True %}
+                        checked
+                      {% endif %}
+
+                      /><span>{{day.2.0}}</span>
+                    </div>
+
+                  {% endfor %}
+                </div>
+                <center><h6><b>Times</b></h6></center>
+                <center>t.b.d.</center>
+                <button type="submit" class="btn-block btn btn-success">
+                  <i class="ion-save"></i> Save
+                </button>
+
               </form>
 
 

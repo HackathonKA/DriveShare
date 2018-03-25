@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('carpool/create', views.CreateCarpool.as_view(), name="createCarpool"),
     path('carpool/leave/<int:id>', views.LeaveCarpool.as_view(), name="leaveCarpool"),
+    path('carpool/update/<int:id>', views.UpdateCarpool.as_view(), name="changeCarpoolSettings"),
     path('carpool/add/<int:id>', views.AddToCarpool.as_view(), name="addToCarpool"),
     path('carpool/<int:id>', views.carpool, name="carpoolOverview"),
     path('carpool/<int:id>/<day>', views.carpool, name="carpoolOverview"),
