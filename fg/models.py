@@ -38,6 +38,9 @@ class Carpool(models.Model):
     def getDriverConfigurationForToday(self):
         return self.getDriverConfiguration(datetime.datetime.now())
 
+    def getDriverConfigurationForTomorrow(self):
+        return self.getDriverConfiguration(datetime.datetime.now() + datetime.timedelta(days=1))
+
     def getDriverConfiguration(self, date):
         """
         @param date a DateTime Object

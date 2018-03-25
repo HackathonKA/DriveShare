@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import *
@@ -27,7 +27,7 @@ def profile(request, num):
     return render(request, "fg/profile.html", {"path":["User", "Profile",], "user": user})
 
 @login_required
-def carpool(request, id):
+def carpool(request, id, day="today"):
     user = request.user
     ms = user.membership_set.all()
     match = False
@@ -43,4 +43,12 @@ def carpool(request, id):
         return HttpResponseForbidden("No Permission!")
 
     carpool = get_object_or_404(Carpool, pk=id)
-    return render(request, "fg/carpool.html", {"carpool": carpool, "driversToday": carpool.getDriverConfigurationForToday()})
+    if day == "today":
+        data = carpool.getDriverConfigurationForToday()
+    elif day == "next":
+        data = carpool.getDriverConfigurationForTomorrow()
+    else:
+        raise Http404
+
+
+    return render(request, "fg/carpool.html", {"carpool": carpool, "driversToday": data})

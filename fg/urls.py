@@ -25,6 +25,7 @@ urlpatterns = [
     path('impressum/', views.impressum, name="impressum"),
 
     path('carpool/<int:id>', views.carpool, name="carpoolOverview"),
+    path('carpool/<int:id>/<day>', views.carpool, name="carpoolOverview"),
 
 
     # Auth stuff
