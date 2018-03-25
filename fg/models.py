@@ -176,6 +176,14 @@ class Membership(models.Model):
 
     days = MultiSelectField(choices=WEEKDAYS, default=["mon", "tue", "wen", "thu", "fri"])
 
+    def getDayConf(self):
+        ret = []
+        for d in WEEKDAYS:
+            day = d[0]
+            ret.append( (day, day in self.days, d[1]) )
+
+        return ret
+
     def __str__(self):
         return "User {0} is member of {1}".format(self.user.username, self.pool.name)
 

@@ -55,6 +55,20 @@ class AddToCarpool(LoginRequiredMixin, View):
         nm.save()
         return redirect("carpoolOverview", id)
 
+class UpdateCarpool(LoginRequiredMixin, View):
+    def get(self, request):
+        raise Http404
+
+    def post(self, request, id):
+        cp = get_object_or_404(Carpool, pk=id)
+        m = get_object_or_404(Membership, user=request.user, pool=cp)
+
+        lst = request.POST.getlist("days")
+        m.days = lst
+        m.save()
+
+        return redirect("carpoolOverview", id)
+
 # Create your views here.
 def home(request):
     return render(request, "fg/home.html", {"path":["Home",]})
@@ -84,6 +98,7 @@ def carpool(request, id, day="today"):
     match = False
     for m in ms:
         if m.pool.pk == id:
+            member = m
             match=True
             break
         else:
@@ -101,5 +116,4 @@ def carpool(request, id, day="today"):
     else:
         raise Http404
 
-
-    return render(request, "fg/carpool.html", {"carpool": carpool, "driversToday": data})
+    return render(request, "fg/carpool.html", {"carpool": carpool, "driversToday": data, "myMember": member})
