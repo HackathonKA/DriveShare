@@ -3,18 +3,92 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DriveShare - {% block title %}CHANGE_TITLE{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'contrib/semantic/semantic.css' %}">
   </head>
+  
+  
   <body>
-
-    <div>Header</div>
+  
+  	<!-- Navigation Bar -->
+  	
+    <div class="ui pointing menu">
+    
+      <!--Left Part-->
+      
+      {% if user.is_authenticated %}
+        <a class="item" href = {% url "dashboard" %} > Dashboard </a>
+        
+  	    <div class="ui pointing dropdown link item">
+		  <span class="text">Carpools</span>
+		  <i class="dropdown icon"></i>
+		  <div class="menu">
+		    <div class="header">Categories</div>
+		    <div class="item">Home Goods</div>
+		    <div class="item">Bedroom</div>
+		    <div class="divider"></div>
+		    <div class="header">Order</div>
+		    <div class="item">Status</div>
+		    <div class="item">Cancellations</div>
+		  </div>
+		</div>
+      {% else %}
+      
+        <a class="item" href = {% url "home" %}>
+          Home
+    	</a>
+    	
+      {% endif %}
+      
+      <!-- Profile/Login/Logout/Register -->
+      
+	  <div class="right menu">
+	    {% if user.is_authenticated %}
+	      <a class="item">
+            Profile
+	  	  </a>
+	      <a class="ui item" href = {% url "logout" %}>
+	        Logout
+	      </a>
+  	    {%else%}
+	  	  <a class="ui item" href = {% url "register" %}>
+	  	    Register
+	  	  <a/>
+	  	  <a class="ui item" href = {% url "login" %}>
+	  	    Login
+	  	  <a/>
+	  	{%endif%}
+  	  </div>
+    </div>
+    
+    
+    
+    <div class="ui segment">
+    <div class="ui breadcrumb">
+      {% for p in path %}
+        <div class="section">{{ p }}</div>
+        <div class="divider"> / </div>
+      {% endfor %}
+    </div>
+    </div>
+    
 
     {% block content %}
     CHANGE THE CONTENT!!!!elf!11!!
     {% endblock %}
 
-    <div>Footer</div>
+    <div class="ui inverted center vertical footer segment form-page">
+      <div class="ui center aligned container">
+        <div class="ui stackable inverted two column grid">
+    	  <div class="column">
+    	  	<a href = {% url "help" %}> Help </a>
+    	  </div>
+    	  <div class="column">
+    	  	<a href = {% url "impressum" %}> Impressum </a>
+    	  </div>
+      </div>
+    </div>
 
   </body>
 </html>
