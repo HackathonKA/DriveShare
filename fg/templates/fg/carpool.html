@@ -7,10 +7,10 @@
 
 {%block content%}
   <h1>{{carpool.name}}</h1>
+  <h2>Drivers List</h2>
   <div class="row">
 
     <div class="order-lg-2 col-lg-3" style="margin-bottom: 20px;">
-      <div class="container">
         <div class="card bg-light mb-3" style="max-width: 18rem;">
           <div class="card-header">Members</div>
           <div class="card-body">
@@ -21,23 +21,26 @@
             </ul>
           </div>
         </div>
-      </div>
     </div>
 
     <div class="col-lg-9">
-      <div class="container">
         <div class="card bg-light mb-3" style="max-width: 18rem;">
           <div class="card-header">Trip A</div>
           <div class="card-body">
             {% for car in driversToday.tripA %}
-              {% for member in car %}
-                - {{member.user.username}} <br>
-              {% endfor %}
+              <h5>{{car.0.user.full_name}} ({{car.0.getCar.name}}) @{{car.0.user.username}}</h5>
+              <h6>Members:</h6>
+                <ul class="list-unstyled">
+                  {% for member in car %}
+                    {% if forloop.counter != 1 %}
+                      <li>{{member.user.full_name}} (@{{member.user.username}})</li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
               <hr>
             {% endfor %}
           </div>
         </div>
-      </div>
     </div>
 
 

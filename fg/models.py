@@ -213,6 +213,9 @@ class Membership(models.Model):
 
         return relChange
 
+    def getCar(self):
+        car = self.user.car_set.get(isActive=True)
+        return car
 
 
 class Car(models.Model):
