@@ -7,19 +7,19 @@
     <title>DriveShare - {% block title %}CHANGE_TITLE{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'contrib/semantic/semantic.css' %}">
   </head>
-  
-  
+
+
   <body>
-  
+
   	<!-- Navigation Bar -->
-  	
+
     <div class="ui pointing menu">
-    
+
       <!--Left Part-->
-      
+
       {% if user.is_authenticated %}
         <a class="item" href = {% url "dashboard" %} > Dashboard </a>
-        
+
   	    <div class="ui pointing dropdown link item">
 		  <span class="text">Carpools</span>
 		  <i class="dropdown icon"></i>
@@ -34,18 +34,18 @@
 		  </div>
 		</div>
       {% else %}
-      
+
         <a class="item" href = {% url "home" %}>
           Home
     	</a>
-    	
+
       {% endif %}
-      
+
       <!-- Profile/Login/Logout/Register -->
-      
+
 	  <div class="right menu">
 	    {% if user.is_authenticated %}
-	      <a class="item">
+	      <a class="item" href="{% url 'profile' user.pk %}">
             Profile
 	  	  </a>
 	      <a class="ui item" href = {% url "logout" %}>
@@ -61,9 +61,9 @@
 	  	{%endif%}
   	  </div>
     </div>
-    
-    
-    
+
+
+
     <div class="ui segment">
     <div class="ui breadcrumb">
       {% for p in path %}
@@ -72,7 +72,7 @@
       {% endfor %}
     </div>
     </div>
-    
+
 
     {% block content %}
     CHANGE THE CONTENT!!!!elf!11!!
