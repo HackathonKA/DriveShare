@@ -1,0 +1,15 @@
+#projectIcon {
+  font-size: 20px;
+  font-weight: 800;
+}
+
+footer.container {
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 15px;
+}
+
+.footerCenter {
+  text-align: left;
+  display: inline-block;
+}
