@@ -21,7 +21,9 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('dashboard/', views.dashboard, name="dashboard"),
-    path('user/<int:id>/profile/', views.profile, name="profile"),
+    path('user/<int:num>/profile/', views.profile, name="profile"),
+    path('help/', views.helpview, name="help"),
+    path('impressum/', views.impressum, name="impressum"),
     
     
 
