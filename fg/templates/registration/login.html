@@ -6,13 +6,28 @@ Login
 
 
 {%block content%}
-  <form action="{% url 'login' %}" method="post">
-  {%csrf_token%}
-
-  {{ form.username.label_tag }} {{ form.username }} <br>
-  {{ form.password.label_tag }} {{ form.password }} <br>
-  <input type="hidden" name="next" value="{{ next }}" />
-  <input type="submit" value="Login" />
-
-  </form>
+  <div class = "container">
+    <div class="row justify-content-center align-items-center">
+	  <div class="card">
+	    <div class="card-header">
+    	  Sign-In
+  		</div>
+	    <div class="card-body">
+	        <form action="{% url 'login' %}" method="post">
+	        {%csrf_token%}
+	        {{ form.username.label_tag }} {{ form.username }} <br>
+	        {{ form.password.label_tag }} {{ form.password }} <br>
+	        <input type="hidden" name="next" value="{{ next }}" />
+	        <div class="container text-right">
+	        <div>
+	          <input type="submit" value="Login" />
+	        </div>
+	        </div>
+	      </form>
+	  	</div>
+	  </div>
+	</div>
+  </div>
+  
+  
 {% endblock %}
